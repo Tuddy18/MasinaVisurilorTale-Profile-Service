@@ -17,7 +17,7 @@ defmodule Profiles.Router do
   plug(Plug.Logger, log: :debug)
 
   plug(:match)
-    plug Profiles.AuthPlug
+#    plug Profiles.AuthPlug
     plug CORSPlug, origin: "*"
   plug(:dispatch)
 
