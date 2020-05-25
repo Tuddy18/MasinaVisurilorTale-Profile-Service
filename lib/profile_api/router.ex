@@ -17,7 +17,7 @@ defmodule Profiles.Router do
   plug(Plug.Logger, log: :debug)
 
   plug(:match)
-#    plug Profiles.AuthPlug
+    plug Profiles.AuthPlug
     plug CORSPlug, origin: "*"
   plug(:dispatch)
 
@@ -161,6 +161,29 @@ defmodule Profiles.Router do
             |> send_resp(507, Poison.encode!(%{"error" => "An unexpected error happened"}))
         end
     end
+  end
+
+  delete "/delete" do
+      id = Map.get(conn.params, "id", nil)
+      photos = Profiles.Repo.all(from d in Profiles.Photo, where: d."ProfileId" == ^id)
+      Enum.each(photos, fn photo -> Profiles.Repo.delete photo end)
+      features = Profiles.Repo.all(from d in Profiles.Feature, where: d."ProfileId" == ^id)
+      Enum.each(features, fn feature -> Profiles.Repo.delete feature end)
+      preferences = Profiles.Repo.all(from d in Profiles.Preference, where: d."ProfileId" == ^id)
+      Enum.each(preferences, fn preference -> Profiles.Repo.delete preference end)
+
+      profile = Profiles.Repo.get(Profiles.Profile, id)
+
+      case Profiles.Repo.delete profile do
+        {:ok, struct}       ->
+          conn
+            |> put_resp_content_type("application/json")
+            |> send_resp(201, Poison.encode!(%{:data => struct}))
+        {:error, changeset} ->
+          conn
+            |> put_resp_content_type("application/json")
+            |> send_resp(507, Poison.encode!(%{"error" => "An unexpected error happened"}))
+        end
   end
 
   forward("/photo", to: Profiles.PhotoRouter)
