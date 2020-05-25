@@ -14,6 +14,7 @@ defmodule Profiles.Endpoint do
     json_decoder: Poison
   )
 #  plug Profiles.AuthPlug
+    plug CORSPlug, origin: "*"
   plug(:dispatch)
 
   post "/login", private: @skip_token_verification do
