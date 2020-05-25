@@ -33,6 +33,9 @@ defmodule Profiles.Router do
 
   get "/get-by-user" do
     userid = Map.get(conn.params, "user_id", nil)
+    {userid, ""} = if is_a_string(userid) do
+              Integer.parse(userid)
+              end
     profiles =  Profiles.Repo.one(from d in Profiles.Profile, where: d."AccountId" == ^userid)
 
     conn
