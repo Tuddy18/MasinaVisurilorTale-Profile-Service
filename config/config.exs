@@ -7,6 +7,9 @@ config :joken, default_signer: "secret2"
 config :profiles, Profiles.Endpoint,
   http: [ip: {0, 0, 0, 0}, port: 4000]
 
+config :cors_plug,
+  send_preflight_response?: true
+
 config :profiles,
   app_secret_key: "secret",
   jwt_validity: 3306,
