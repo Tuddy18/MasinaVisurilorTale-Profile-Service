@@ -33,7 +33,8 @@ defmodule Profiles.MixProject do
       {:httpotion, "~> 3.1.0"},
 #      {:myxql, "~> 0.3.0"},
     {:ecto, "~> 2.0"},
-    {:mariaex, "~> 0.7"}
+    {:mariaex, "~> 0.7"},
+      {:amqp, "~> 1.0"}
     ]
   end
 end

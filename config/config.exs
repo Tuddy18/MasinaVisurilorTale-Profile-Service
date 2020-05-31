@@ -16,7 +16,8 @@ config :profiles,
   api_host: "localhost",
   api_version: 2,
   api_prefix: "http",
-  account_service_url: "https://elixir-account-service.azurewebsites.net"
+  account_service_url: "https://elixir-account-service.azurewebsites.net",
+  rabbitmq_host: "amqp://hiiscdyn:r82F2WHFvJ8cGyb6ZVabMbzvprfKk92O@rattlesnake.rmq.cloudamqp.com/hiiscdyn"
 
 config :profiles, Profiles.Repo,
   adapter: Ecto.Adapters.MySQL,

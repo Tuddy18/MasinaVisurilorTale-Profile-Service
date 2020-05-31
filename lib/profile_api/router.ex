@@ -114,6 +114,22 @@ defmodule Profiles.Router do
           Description: ""
         } |> Profiles.Repo.insert do
           {:ok, new_profile} ->
+
+            rabbit_url = Application.get_env(:profiles, :rabbitmq_host)
+            Logger.debug inspect(rabbit_url)
+
+            case AMQP.Connection.open(rabbit_url) do
+              {:ok, connection} ->
+                case AMQP.Channel.open(connection) do
+                  {:ok, channel} ->
+                  AMQP.Queue.declare(channel, "profile_id_#{new_profile."ProfileId"}")
+                  AMQP.Connection.close(connection)
+                  {:error, unkown_host} ->
+                  Logger.debug inspect(unkown_host)
+              :error ->
+                Logger.debug inspect("AMQP connection coould not be established")
+                end
+            end
             conn
             |> put_resp_content_type("application/json")
             |> send_resp(201, Poison.encode!(%{:data => new_profile}))
