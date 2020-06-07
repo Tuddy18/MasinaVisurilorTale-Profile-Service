@@ -8,5 +8,6 @@ RUN mix do deps.get, deps.compile, compile
 #RUN mix do deps.get, deps.compile, compile
 
 EXPOSE 4000
+EXPOSE 2222
 
 ENTRYPOINT ["mix", "run", "--no-halt"]
