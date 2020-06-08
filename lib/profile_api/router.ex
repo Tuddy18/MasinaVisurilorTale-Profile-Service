@@ -13,6 +13,7 @@ defmodule Profiles.Router do
 
   #use Profiles.Auth
   require Logger
+  @skip_token_verification %{jwt_skip: true}
 
   plug(Plug.Logger, log: :debug)
 
@@ -88,7 +89,7 @@ defmodule Profiles.Router do
     end
  end
 
-  post "/insert" do
+  post "/insert", private: @skip_token_verification do
     Logger.debug inspect(conn.body_params)
 
     {user_id, name, type} = {
